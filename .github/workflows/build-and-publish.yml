@@ -26,7 +26,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Generate release filename
-        run: RELEASE_NAME=$(python ./generate_release_filename.py) && echo RELEASE_NAME=$RELEASE_NAME
+        run: |
+          RELEASE_NAME="$(python ./generate_release_filename.py)"
+          echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
       - name: Build
         run: pyinstaller -F main.py -n ${{ env.RELEASE_NAME }}
       - name: Save build artifact
@@ -43,7 +45,9 @@ jobs:
         with:
           path: dist
       - name: Read version
-        run: RELEASE_VERSION=$(cat version} && echo RELEASE_VERSION=$RELEASE_VERSION
+        run: |
+          RELEASE_VERSION="$(cat version)"
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
       - name: Publish
         uses: softprops/action-gh-release@v2
         with:

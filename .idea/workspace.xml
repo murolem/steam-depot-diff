@@ -140,7 +140,31 @@
       <option name="project" value="LOCAL" />
       <updated>1773148293128</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="fix workflow">
+      <option name="closed" value="true" />
+      <created>1773148383455</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1773148383455</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fix workflow attempt #2">
+      <option name="closed" value="true" />
+      <created>1773148499339</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1773148499339</updated>
+    </task>
+    <task id="LOCAL-00007" summary="fix workflow attempt #3">
+      <option name="closed" value="true" />
+      <created>1773148581720</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1773148581720</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -165,7 +189,10 @@
     <MESSAGE value="wip" />
     <MESSAGE value="core done" />
     <MESSAGE value="touch-ups; add release workflow" />
-    <option name="LAST_COMMIT_MESSAGE" value="touch-ups; add release workflow" />
+    <MESSAGE value="fix workflow" />
+    <MESSAGE value="fix workflow attempt #2" />
+    <MESSAGE value="fix workflow attempt #3" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix workflow attempt #3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
