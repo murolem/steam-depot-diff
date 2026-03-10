@@ -108,10 +108,12 @@ if args.relogin:
 steam_creds = get_steam_creds()
 print("Will login to DepotDownloader as: " + steam_creds.login)
 
-depot1 = dd.get_depot(depot_init.get('app'), depot_init.get('depot'), depot_init.get('manifest_from'), args.dd_args)
-depot2 = dd.get_depot(depot_init.get('app'), depot_init.get('depot'), depot_init.get('manifest_to'), args.dd_args)
+depot_1_dirpath = dd.get_depot(depot_init.get('app'), depot_init.get('depot'), depot_init.get('manifest_from'), args.dd_args)
+depot_2_dirpath = dd.get_depot(depot_init.get('app'), depot_init.get('depot'), depot_init.get('manifest_to'), args.dd_args)
 
-diff(args.diff_path, depot1, depot2)
+print(depot_1_dirpath, depot_2_dirpath)
+
+# diff(args.diff_path, depot_paths[0], depot_paths[1])
 
 raise Exception('stop')
 
