@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e72f9f5-4afd-4464-b41c-8cb698323151" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/build-and-publish.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VERSION" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generate_release_filename.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/get_version.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/dd.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/dd.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/r.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-    </list>
+    <list default="true" id="1e72f9f5-4afd-4464-b41c-8cb698323151" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -143,7 +132,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773119610088</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="touch-ups; add release workflow">
+      <option name="closed" value="true" />
+      <created>1773148293128</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1773148293128</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -167,7 +164,8 @@
     <MESSAGE value="init" />
     <MESSAGE value="wip" />
     <MESSAGE value="core done" />
-    <option name="LAST_COMMIT_MESSAGE" value="core done" />
+    <MESSAGE value="touch-ups; add release workflow" />
+    <option name="LAST_COMMIT_MESSAGE" value="touch-ups; add release workflow" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

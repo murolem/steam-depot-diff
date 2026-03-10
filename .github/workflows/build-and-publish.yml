@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Generate release filename
-        run: RELEASE_NAME=$(python ./generate_release_filename.py) && && echo RELEASE_NAME=$RELEASE_NAME
+        run: RELEASE_NAME=$(python ./generate_release_filename.py) && echo RELEASE_NAME=$RELEASE_NAME
       - name: Build
         run: pyinstaller -F main.py -n $RELEASE_NAME
       - name: Save build artifact
