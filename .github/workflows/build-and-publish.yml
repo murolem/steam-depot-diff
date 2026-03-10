@@ -44,6 +44,12 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout VERSION
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            VERSION
+          sparse-checkout-cone-mode: false
       - name: Download build artifacts
         uses: actions/download-artifact@v5
         with:
