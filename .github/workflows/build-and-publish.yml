@@ -66,3 +66,4 @@ jobs:
         with:
           name: ${{ env.RELEASE_VERSION }}
           tag_name: ${{ env.RELEASE_VERSION }}
+          files: dist/*
