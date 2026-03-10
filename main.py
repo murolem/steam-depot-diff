@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+import argparse
 import json
 import os
 import shutil
@@ -6,69 +9,115 @@ from pathlib import Path
 from typing import Any, TypedDict
 from git import Repo
 from dotenv import load_dotenv
+from lib.creds import clear_steam_creds_from_disk, get_steam_creds
+from tabulate import tabulate
+from lib.dd import DepotDownloader, DepotInit
+from lib.diff import diff
 
-load_dotenv()
+VERSION = "1.0.0"
+
+class ArgumentFormatter(
+    argparse.ArgumentDefaultsHelpFormatter,
+    argparse.RawTextHelpFormatter
+):
+    pass
+
+argparser = argparse.ArgumentParser(
+                    prog='Steam Depot Differ',
+                    description='Downloads app depots and diffs changes between them.',
+                    epilog='Source code: https://github.com/murolem/steam-depot-diff',
+                    formatter_class=ArgumentFormatter
+)
+argparser.add_argument('--version', action='version', version=f'%(prog)s {VERSION}')
+
+pos_args_depot_str_help_table = group2_help_table = tabulate([
+    ["Steam console", """\
+download_depot 329130 329133 5541496194205663540 1446294067501623196
+               ^app  ^depot  ^manifest from      ^manifest to
+    """],
+    ["DepotDownloader", """\
+-app 329130 -depot 329133 -manifest 5541496194205663540 1446294067501623196
+     ^app          ^depot           ^manifest from      ^manifest to                  
+"""],
+    ["Freehand", """\
+329130 329133 5541496194205663540 1446294067501623196
+^app   ^depot ^manifest from      ^manifest to
+"""]
+], headers=["Format", "Example"], tablefmt="grid")
+
+argparser.add_argument('app_or_depot_string', help=f"""\
+Application ID or depot string. 
+
+If used as application ID, other positional arguments must be provided. 
+Example: 722730
+
+If used as a depot string, a string containing information about the app, depot and manifest must be provided in this singular argument.
+This is useful for when copying depot strings straight from SteamDB.
+For convenience, the "manifest to" is just slapped at the back.
+
+Examples:
+{pos_args_depot_str_help_table}
+""")
+argparser.add_argument('depot', help="Depot ID: Example: 799601", nargs="?")
+argparser.add_argument('manifest_from', help="Manifest ID of manifest to base the diff at. Example: 5090889475431819364", nargs="?")
+argparser.add_argument('manifest_to', help="Manifest ID of manifest to diff with. Example: 4892202388027804689", nargs="?")
+
+group_dd = argparser.add_argument_group("DEPOT DOWNLOADER")
+group_dd.add_argument('--dd-path', help="DepotDownloader binary directory. Created and downloaded automatically from the official repo if missing.", default=f"3rd-party{os.path.sep}depot-downloader")
+group_dd.add_argument('--redownload-dd', help="Deletes existing DepotDownloader binary (if any) and downloads it again.", action="store_true")
+group_dd.add_argument('--dd-args', help="Additional args to pass to DepotDownloader for each depot download.")
+
+group_creds = argparser.add_argument_group("CREDENTIALS")
+group_creds.add_argument('--relogin', help="Removes any saved Steam credentials. Useful if entered wrong.", action="store_true")
+
+group_depot = argparser.add_argument_group("DEPOTS")
+group_depot.add_argument('--depots-path', help="Directory path for storing depots.", default="depots")
+
+group_diff = argparser.add_argument_group("DIFF")
+group_diff.add_argument('--diff-path', help="Directory path for diff process. This is where the diff will happen and can be viewed.", default="diff")
+
+args = argparser.parse_args()
 
 # ===============
-# == VARIABLES ==
+# == SETUP ==
 # ===============
 
-# specify the depots for a previous version.
-# this list just takes the command the "copy manifest" button outputs on a depot's page, for example:
-# download_depot 799600 799601 2417336363700306381
-#
-# depots for Cosmoteer can be found here https://steamdb.info/app/799600/depots/
-# you can at date to determine which manifest is for what update.
-# use version history on the wiki to find the update dates you need: https://cosmoteer.wiki.gg/wiki/Version_History
+dd = DepotDownloader(args.dd_path, args.depots_path)
 
-# important depots:
-# - "Cosmoteer Core" for its "bin" folder with the executable:
-# - "Cosmoteer x86/x64" for the actual data and locales. Use whatever is your architecture.
-#
-# below are two examples commented out:
-# - first is the "Cosmoteer Core" depot
-# - second is "Cosmoteer x86" depot
-# these are for "0.26.1g" version.
-previous_version_depots: list[str] = [
-    # 'download_depot 799600 799603 4627408845394697137',  # core
-    'download_depot 799600 799601 1252035611068335302',  # data
-]
+# parse depot string
+depot_init: DepotInit
+if args.depot is None:
+    # only single arg provided, assuming depot string
+    depot_init = DepotDownloader.try_parse_depot_string(args.app_or_depot_string)
+    if depot_init is None:
+        argparser.error("Failed to parse depot string. Make sure the correct format is used. Provided string: " + args.app_or_depot_string)
+else:
+    depot_init = DepotInit(
+        app = args.app_or_depot_string,
+        depot = args.depot,
+        manifest_from = args.manifest_from,
+        manifest_to = args.manifest_to,
+    )
 
-# specify the depots for a new version.
-# see description of "previous_version_depots" for details.
-#
-# below are two examples commented out:
-# - first is the "Cosmoteer Core" depot
-# - second is "Cosmoteer x86" depot
-# these are for "0.26.2" version.
-new_version_depots: list[str] = [
-    # 'download_depot 799600 799603 4284354019772974139',  # core
-    'download_depot 799600 799601 7220058335861384850',  # data
-]
+dd.get_exec(force_download=args.redownload_dd)
+print("DepotDownloader executable: " + dd.dd_exec_path)
 
-# whether to skip both download and validation of the depots.
-# this will only work if you have depots already downloaded - otherwise script will fail.
-skip_depot_download_and_validate: bool = False
+print("Getting Steam credentials")
+if args.relogin:
+    clear_steam_creds_from_disk()
+steam_creds = get_steam_creds()
+print("Will login to DepotDownloader as: " + steam_creds.login)
+
+depot1 = dd.get_depot(depot_init.get('app'), depot_init.get('depot'), depot_init.get('manifest_from'), args.dd_args)
+depot2 = dd.get_depot(depot_init.get('app'), depot_init.get('depot'), depot_init.get('manifest_to'), args.dd_args)
+
+diff(args.diff_path, depot1, depot2)
+
+raise Exception('stop')
 
 # ===============
 # == SCRIPT ==
 # ===============
-
-# figure out variables
-
-depot_downloader_dirname = "depot-downloader"
-if not os.path.exists(depot_downloader_dirname):
-    raise Exception(
-        f"depot downloader directory not found; path: '{depot_downloader_dirname}'. create the directory and place the depot downloader inside."
-    )
-
-depot_downloader_app_path_matches = [f for f in os.listdir(depot_downloader_dirname) if f.lower().startswith(("depotdownloader"))]
-if len(depot_downloader_app_path_matches) == 0:
-    raise Exception(
-        f"depot downloader executable not found in dir: '{depot_downloader_dirname}'. download the depot downloader and place it inside the directory."
-    )
-
-depot_downloader_app_path = os.path.join(depot_downloader_dirname, depot_downloader_app_path_matches[0])
 
 # depot downloader metadata dir name that the downloader creates.
 depot_downloader_metadata_dir = ".DepotDownloader"
@@ -93,23 +142,6 @@ def shututil_rmtree_onerror(func, path, exc_info):
         func(path)
     else:
         raise
-
-def raise_env_var_is_not_specified_exception(env_var_name) -> None:
-    raise Exception((
-            f"environment variable '{env_var_name}' not found: if you haven't, create '.env' file in the project's directory, and define following variables:"
-            + "\nSTEAM_LOGIN=your_steam_login"
-            + "\nSTEAM_PASSWORD=your_steam_password"
-    ))
-
-
-steam_login = os.getenv('STEAM_LOGIN')
-if steam_login is None:
-    raise_env_var_is_not_specified_exception('STEAM_LOGIN')
-
-steam_password = os.getenv('STEAM_PASSWORD')
-if steam_password is None:
-    raise_env_var_is_not_specified_exception('STEAM_PASSWORD')
-
 
 # parse depots
 
@@ -160,9 +192,6 @@ else:
         print(
             f"[{i + 1} of {depots_to_download_total}] downloading depot {depot['depot']} manifest {depot['manifest']}...")
 
-        subprocess.call(
-            f"{depot_downloader_app_path} -username {steam_login} -password {steam_password} -remember-password -validate -dir {depot['rel_output_path']} -app {depot['app_id']} -depot {depot['depot']} -manifest {depot['manifest']}"
-        )
 
 
 # generate a diff repo
@@ -213,7 +242,7 @@ print("staging... (this may take a while)")
 repo.git.add(all=True)
 
 print("commiting...")
-repo.index.commit("previous ver")
+repo.index.commit("previous version")
 
 # remove depots from diff
 
@@ -243,4 +272,4 @@ print("staging... (this may take a while)")
 repo.git.add(all=True)
 
 print("commiting...")
-repo.index.commit("previous ver")
+repo.index.commit("new version")

@@ -1,3 +1,5 @@
 # steam-depot-diff
-A diff utility for Steam depots.
+A Python diff utility for Steam depots.
 
+## Requirements
+Python 3.5+
