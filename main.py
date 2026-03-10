@@ -8,7 +8,8 @@ from lib.creds import clear_steam_creds_from_disk, get_steam_creds
 from lib.dd import DepotDownloader, DepotInit
 from lib.diff import diff
 
-VERSION = "1.0.0"
+with open('VERSION', 'r') as file:
+    VERSION = file.read().strip()
 
 class ArgumentFormatter(
     argparse.ArgumentDefaultsHelpFormatter,
@@ -69,7 +70,7 @@ group_depot.add_argument('--dd-args', help="Additional args to pass to DepotDown
 group_depot.add_argument('--depots-path', help="Directory path for storing depots.", default="depots")
 
 group_dd = argparser.add_argument_group("DEPOT DOWNLOADER")
-group_dd.add_argument('--dd-path', help="DepotDownloader binary directory. Created and downloaded automatically from the official repo if missing.", default=f"3rd-party{os.path.sep}depot-downloader")
+group_dd.add_argument('--dd-path', help="DepotDownloader binary directory. Created and downloaded automatically from the official repo if missing.", default=f"DepotDownloader")
 group_dd.add_argument('--redownload-dd', help="Deletes existing DepotDownloader binary (if any) and downloads it again.", action="store_true")
 
 group_diff = argparser.add_argument_group("DIFF")

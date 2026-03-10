@@ -215,7 +215,7 @@ class DepotDownloader:
         output_dirpath = os.path.join(self.depots_dirpath, f"app-{app}", f"depot-{depot}", f"manifest-{manifest}")
 
         creds = get_steam_creds()
-        command = f"{self.dd_exec_path} -loginid {self.depot_downloads_counter} -username {creds.login} -password {creds.password} -remember-password -app {app} -depot {depot} -manifest {manifest} -branch {branch} -validate -dir {output_dirpath}"
+        command = f"{self.dd_exec_path} -username {creds.login} -password {creds.password} -remember-password -app {app} -depot {depot} -manifest {manifest} -branch {branch} -validate -dir {output_dirpath}"
         if dd_args:
             command += f" {dd_args}"
 

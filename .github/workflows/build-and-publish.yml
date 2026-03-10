@@ -1,0 +1,49 @@
+name: build-and-publish
+
+on:
+  push:
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Generate release filename
+        run: RELEASE_NAME=$(python ./generate_release_filename.py) && && echo RELEASE_NAME=$RELEASE_NAME
+      - name: Build
+        run: pyinstaller -F main.py -n $RELEASE_NAME
+      - name: Save build artifact
+        uses: actions/upload-artifact@v6
+        with:
+          path: dist
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v5
+        with:
+          path: dist
+      - name: Read version
+        run: RELEASE_VERSION=$(cat version} && echo RELEASE_VERSION=$RELEASE_VERSION
+      - name: Publish
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ env.RELEASE_VERSION }}
+          tag_name: ${{ env.RELEASE_VERSION }}
