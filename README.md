@@ -2,4 +2,4 @@
 A Python diff utility for Steam depots.
 
 ## Requirements
-Python 3.5+
+Python 3.9+

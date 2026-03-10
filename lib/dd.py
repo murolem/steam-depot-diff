@@ -2,6 +2,7 @@ import argparse
 import io
 import os
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -9,18 +10,23 @@ import zipfile
 from contextlib import redirect_stderr
 from datetime import datetime
 from pathlib import Path
-from typing import TypedDict
-
+from tkinter.messagebox import RETRY
+from typing import TypedDict, Optional, Any
+from result import Ok, Err, Result, is_ok, is_err
 import requests
-
 from lib.creds import get_steam_creds
 from lib.download import download
 
 class DepotInit(TypedDict):
     app: str
     depot: str
-    manifest_from: str
-    manifest_to: str
+    manifest: str
+    branch: str
+
+class ParseDepotStringError(TypedDict):
+    reason: str
+    error: Optional[Exception | list[Exception]]
+    details: Optional[Any]
 
 class DepotDownloader:
     def __init__(self, dd_dirpath: str, depots_dirpath: str):
@@ -31,81 +37,78 @@ class DepotDownloader:
         self.depot_downloads_counter = 0
 
     @staticmethod
-    def try_parse_depot_string(value: str) -> DepotInit | None:
-        parsed = None
-        try:
-            f = io.StringIO()
-            with redirect_stderr(f):
-                parsed = (
-                    DepotDownloader._try_parse_depot_string_fmted_as_steam_console(value)
-                    or DepotDownloader._try_parse_depot_string_fmted_as_depot_downloader(value)
-                    or DepotDownloader._try_parse_depot_string_fmted_as_freehand(value)
-                )
-        except:
-            pass
+    def parse_depot_string(value: str | None) -> Result[DepotInit, ParseDepotStringError]:
+        if value is None:
+            return Err(ParseDepotStringError(
+                reason="String is None"
+            ))
 
-        return parsed
+        parsed1 = DepotDownloader._try_parse_depot_string_fmted_as_steam_console(value)
+        if isinstance(parsed1, dict):
+            return Ok(parsed1)
+
+        parsed2 = DepotDownloader._try_parse_depot_string_fmted_as_depot_downloader(value)
+        if isinstance(parsed2, dict):
+            return Ok(parsed2)
+
+        return Err(ParseDepotStringError(
+            reason="Parse error; methods exhausted",
+            error=[
+                ["method1", parsed1],
+                ["method2", parsed2],
+            ],
+            details={
+                "string": value
+            }
+        ))
 
     @staticmethod
-    def _try_parse_depot_string_fmted_as_steam_console(value: str) -> DepotInit | None:
-        # example: download_depot 329130 329133 1446294067501623196 1446294067501623197
+    def _try_parse_depot_string_fmted_as_steam_console(value: str) -> DepotInit | Exception:
+        # all args are positional
+        # example: download_depot 329130 329133 1446294067501623196
 
-        parser = argparse.ArgumentParser()
+        parser = argparse.ArgumentParser(exit_on_error=False)
         parser.add_argument("command")
         parser.add_argument("app")
         parser.add_argument("depot")
-        parser.add_argument("manifest_from")
-        parser.add_argument("manifest_to")
+        parser.add_argument("manifest")
         try:
             parsed = parser.parse_args(value.split())
             return DepotInit(
                 app=parsed.app,
                 depot=parsed.depot,
-                manifest_from=parsed.manifest_from,
-                manifest_to=parsed.manifest_to,
+                manifest=parsed.manifest,
+                branch="public"
             )
-        except:
-            return None
+        except Exception as e:
+            return e
 
     @staticmethod
-    def _try_parse_depot_string_fmted_as_depot_downloader(value: str) -> DepotInit | None:
-        # example: -app 329130 -depot 329133 -manifest 1446294067501623196 1446294067501623197
+    def _try_parse_depot_string_fmted_as_depot_downloader(value: str) -> DepotInit | Exception:
+        # args as options but with a shorthand '-'
+        # example: -app 329130 -depot 329133 -manifest 1446294067501623196
+        # options: -branch some_branch -beta some_branch
 
-        parser = argparse.ArgumentParser()
-        parser.add_argument("-app", required=True)
-        parser.add_argument("-depot", required=True)
-        parser.add_argument("-manifest-from", required=True)
-        parser.add_argument("-manifest-to", required=True)
+        # normalize option dash by replacing it with double dash
+        dash_norm_regex = r'(-)([a-zA-Z0-9]+ [a-zA-Z0-9]+)'
+        value = re.sub(dash_norm_regex, "--\\2", value)
+        print(value)
+
+        parser = argparse.ArgumentParser(exit_on_error=False)
+        parser.add_argument("--app", required=True)
+        parser.add_argument("--depot", required=True)
+        parser.add_argument("--manifest", required=True)
+        parser.add_argument("--beta", "--branch", dest="branch", default="public")
         try:
-            parsed = parser.parse_args(value.split())
+            options, args = parser.parse_known_args(value.split())
             return DepotInit(
-                app=parsed.app,
-                depot=parsed.depot,
-                manifest_from=parsed.manifest_from,
-                manifest_to=parsed.manifest_to,
+                app=options.app,
+                depot=options.depot,
+                manifest=options.manifest,
+                branch=options.branch
             )
-        except:
-            return None
-
-    @staticmethod
-    def _try_parse_depot_string_fmted_as_freehand(value: str) -> DepotInit | None:
-        # example: 329130 329133 1446294067501623196 1446294067501623197
-
-        parser = argparse.ArgumentParser()
-        parser.add_argument("app")
-        parser.add_argument("depot")
-        parser.add_argument("manifest_from")
-        parser.add_argument("manifest_to")
-        try:
-            parsed = parser.parse_args(value.split())
-            return DepotInit(
-                app=parsed.app,
-                depot=parsed.depot,
-                manifest_from=parsed.manifest_from,
-                manifest_to=parsed.manifest_to,
-            )
-        except:
-            return None
+        except Exception as e:
+            return e
 
     def get_exec(
             self,
@@ -188,17 +191,21 @@ class DepotDownloader:
         self.is_setup = True
         self.dd_exec_path = self._get_exec_filepath()
 
-    def get_depot(self, app: str, depot: str, manifest: str, dd_args: str = "") -> str:
+    def get_depot(self, depot_init: DepotInit, branch_override: Optional[str], dd_args: Optional[str]) -> str:
         """
         Downloads depot with specified manifest.
 
-        :param app: App ID.
-        :param depot: Depot ID.
-        :param manifest: Manifest ID.
+        :param depot_init: Depot.
+        :param branch_override: Branch override. Overrides branch in depot_init..
         :param dd_args: Extra args to pass to the DepotDownloader executable (as-is).
         :return: Path to the downloaded depot.
         :raises Exception: If download failed.
         """
+
+        app = depot_init.get("app")
+        depot = depot_init.get("depot")
+        manifest = depot_init.get("manifest")
+        branch = branch_override or depot_init.get("branch")
 
         self.depot_downloads_counter += 1
 
@@ -208,7 +215,7 @@ class DepotDownloader:
         output_dirpath = os.path.join(self.depots_dirpath, f"app-{app}", f"depot-{depot}", f"manifest-{manifest}")
 
         creds = get_steam_creds()
-        command = f"{self.dd_exec_path} -loginid {self.depot_downloads_counter} -username {creds.login} -password {creds.password} -remember-password -app {app} -depot {depot} -manifest {manifest} -validate -dir {output_dirpath}"
+        command = f"{self.dd_exec_path} -loginid {self.depot_downloads_counter} -username {creds.login} -password {creds.password} -remember-password -app {app} -depot {depot} -manifest {manifest} -branch {branch} -validate -dir {output_dirpath}"
         if dd_args:
             command += f" {dd_args}"
 
