@@ -1,4 +1,6 @@
 name: build-and-publish
+permissions:
+  contents: write
 
 on:
   push:
