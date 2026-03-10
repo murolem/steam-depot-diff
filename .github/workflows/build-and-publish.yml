@@ -37,6 +37,7 @@ jobs:
       - name: Save build artifact
         uses: actions/upload-artifact@v6
         with:
+          name: artifact-${{ strategy.job-index }}
           path: dist
 
   publish:
