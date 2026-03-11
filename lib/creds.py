@@ -40,7 +40,7 @@ def get_steam_creds(creds_filepath: str) -> SteamCreds:
 
     if (
         steam_login_res.source == "prompted" or steam_pass_res.source == "prompted"
-    ) and confirm(f"Remember credentials? (will be saved into '{creds_fp}' file)", default=True):
+    ) and confirm(f"Remember credentials? (will be saved into '{creds_fp}' file) (can be reset with --relogin)", default=True):
         var('STEAM_LOGIN', lambda: steam_login_res.value, save_to_disk=True)
         var('STEAM_PASSWORD', lambda: steam_pass_res.value, save_to_disk=True)
 
