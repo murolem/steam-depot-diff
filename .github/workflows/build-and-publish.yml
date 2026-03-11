@@ -33,7 +33,7 @@ jobs:
           echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
       - name: Build
         shell: bash
-        run: pyinstaller -F main.py -n ${{ env.RELEASE_NAME }}
+        run: pyinstaller -F main.py -n ${{ env.RELEASE_NAME }} --add-data VERSION:.
       - name: Save build artifact
         uses: actions/upload-artifact@v6
         with:

@@ -7,8 +7,9 @@ from tabulate import tabulate
 from lib.creds import clear_steam_creds_from_disk, get_steam_creds
 from lib.dd import DepotDownloader, DepotInit
 from lib.diff import diff
+from lib.inner_binary_path import inner_binary_path
 
-with open('VERSION', 'r') as file:
+with open(inner_binary_path + 'VERSION', 'r') as file:
     VERSION = file.read().strip()
 
 class ArgumentFormatter(
@@ -67,18 +68,20 @@ argparser.add_argument('manifest_base', help="Manifest ID of manifest to base th
 group_depot = argparser.add_argument_group("DEPOTS")
 group_depot.add_argument('--branch', help="Download from specified branch if available. Public by default. Takes precedence over branch specified in depot string, if any.")
 group_depot.add_argument('--dd-args', help="Additional args to pass to DepotDownloader for each depot download.")
-group_depot.add_argument('--depots-path', help="Directory path for storing depots.", default="depots")
+group_depot.add_argument('--depots-path', help="Directory path for storing depots.", default="depot-diff/depots")
 
 group_dd = argparser.add_argument_group("DEPOT DOWNLOADER")
-group_dd.add_argument('--dd-path', help="DepotDownloader binary directory. Created and downloaded automatically from the official repo if missing.", default=f"DepotDownloader")
+group_dd.add_argument('--dd-path', help="DepotDownloader binary directory. Created and downloaded automatically from the official repo if missing.", default=f"depot-diff/DepotDownloader")
 group_dd.add_argument('--redownload-dd', help="Deletes existing DepotDownloader binary (if any) and downloads it again.", action="store_true")
 
 group_diff = argparser.add_argument_group("DIFF")
-group_diff.add_argument('--diff-path', help="Directory path for diff process. This is where the diff will happen and can be viewed.", default="diff")
+group_diff.add_argument('--diff-path', help="Directory path for diff process. This is where the diff will happen and can be viewed.", default="depot-diff/diff")
 group_diff.add_argument('--commit-diff', help="Commits the diff. May be preferred if viewing the commited changes vs uncommited is more convenient.", action="store_true")
 
 group_creds = argparser.add_argument_group("CREDENTIALS")
 group_creds.add_argument('--relogin', help="Removes any saved Steam credentials. Useful if entered wrong.", action="store_true")
+group_creds.add_argument('--creds-path', help="Path to the file containing credentials.", default="depot-diff/.env")
+
 
 args = argparser.parse_args()
 
@@ -86,7 +89,7 @@ args = argparser.parse_args()
 # ==== SCRIPT ====
 # ================
 
-dd = DepotDownloader(args.dd_path, args.depots_path)
+dd = DepotDownloader(args.dd_path, args.depots_path, args.creds_path)
 
 depot_top: DepotInit
 depot_base: DepotInit
@@ -134,7 +137,7 @@ print("DepotDownloader executable: " + dd.dd_exec_path)
 print("Getting Steam credentials")
 if args.relogin:
     clear_steam_creds_from_disk()
-steam_creds = get_steam_creds()
+steam_creds = get_steam_creds(args.creds_path)
 print("Will login to DepotDownloader as: " + steam_creds.login)
 
 print("Getting depots")

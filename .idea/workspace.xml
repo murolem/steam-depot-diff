@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e72f9f5-4afd-4464-b41c-8cb698323151" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/README-template.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generate-readme.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+    <list default="true" id="1d1aec27-28cf-44ad-bd03-d4bf192870fe" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/steam-depot-diff.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/build-and-publish.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/build-and-publish.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README-template.md" beforeDir="false" afterPath="$PROJECT_DIR$/README-template.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generate-readme.py" beforeDir="false" afterPath="$PROJECT_DIR$/generate_readme.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generate_release_filename.py" beforeDir="false" afterPath="$PROJECT_DIR$/generate_release_filename.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/creds.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/creds.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/dd.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/dd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,264 +27,51 @@
       <option value="repository" />
     </option>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 1
-}</component>
-  <component name="ProjectId" id="2itljjlirxuZqDKzxFEQXWS6cao" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="3AmynPgQJ8tbCaoVeNMit8P8WjR" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.main.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/aliser/repos/steam-depot-diff&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "ai.playground.ignore.import.keys.banner.in.settings": "true",
+    "git-widget-placeholder": "main",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-    </key>
-  </component>
-  <component name="RunManager">
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <module name="DepotDownloader-windows-x64" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="RUN_TOOL" value="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
-      <option name="PARAMETERS" value="1 2 3 4" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-  </component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.31033.139" />
+        <option value="bundled-python-sdk-2653e85de345-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.31033.139" />
       </set>
     </attachedChunks>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="1e72f9f5-4afd-4464-b41c-8cb698323151" name="Changes" comment="" />
-      <created>1720317890558</created>
+      <changelist id="1d1aec27-28cf-44ad-bd03-d4bf192870fe" name="Changes" comment="" />
+      <created>1773212209028</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1720317890558</updated>
-      <workItem from="1754906876083" duration="1030000" />
-      <workItem from="1754907928606" duration="2038000" />
+      <updated>1773212209028</updated>
+      <workItem from="1773212210809" duration="402000" />
     </task>
-    <task id="LOCAL-00001" summary="init">
-      <option name="closed" value="true" />
-      <created>1754908300891</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1754908300891</updated>
-    </task>
-    <task id="LOCAL-00002" summary="wip">
-      <option name="closed" value="true" />
-      <created>1773104128747</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1773104128748</updated>
-    </task>
-    <task id="LOCAL-00003" summary="core done">
-      <option name="closed" value="true" />
-      <created>1773119610088</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1773119610088</updated>
-    </task>
-    <task id="LOCAL-00004" summary="touch-ups; add release workflow">
-      <option name="closed" value="true" />
-      <created>1773148293128</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1773148293128</updated>
-    </task>
-    <task id="LOCAL-00005" summary="fix workflow">
-      <option name="closed" value="true" />
-      <created>1773148383455</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1773148383455</updated>
-    </task>
-    <task id="LOCAL-00006" summary="fix workflow attempt #2">
-      <option name="closed" value="true" />
-      <created>1773148499339</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1773148499339</updated>
-    </task>
-    <task id="LOCAL-00007" summary="fix workflow attempt #3">
-      <option name="closed" value="true" />
-      <created>1773148581720</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1773148581720</updated>
-    </task>
-    <task id="LOCAL-00008" summary="fix workflow attempt #4">
-      <option name="closed" value="true" />
-      <created>1773148832043</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1773148832043</updated>
-    </task>
-    <task id="LOCAL-00009" summary="fix workflow attempt #5">
-      <option name="closed" value="true" />
-      <created>1773149016684</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1773149016684</updated>
-    </task>
-    <task id="LOCAL-00010" summary="fix workflow attempt #6">
-      <option name="closed" value="true" />
-      <created>1773149254904</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1773149254904</updated>
-    </task>
-    <task id="LOCAL-00011" summary="fix workflow attempt #7">
-      <option name="closed" value="true" />
-      <created>1773149388112</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1773149388112</updated>
-    </task>
-    <task id="LOCAL-00012" summary="fix workflow attempt #8">
-      <option name="closed" value="true" />
-      <created>1773149611887</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1773149611887</updated>
-    </task>
-    <task id="LOCAL-00013" summary="fix workflow attempt #9">
-      <option name="closed" value="true" />
-      <created>1773150676241</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1773150676241</updated>
-    </task>
-    <task id="LOCAL-00014" summary="fox workflow attempt #10">
-      <option name="closed" value="true" />
-      <created>1773151189915</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1773151189915</updated>
-    </task>
-    <task id="LOCAL-00015" summary="fox fluff attempt 11">
-      <option name="closed" value="true" />
-      <created>1773151429415</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1773151429415</updated>
-    </task>
-    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
-  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="init" />
-    <MESSAGE value="wip" />
-    <MESSAGE value="core done" />
-    <MESSAGE value="touch-ups; add release workflow" />
-    <MESSAGE value="fix workflow" />
-    <MESSAGE value="fix workflow attempt #2" />
-    <MESSAGE value="fix workflow attempt #3" />
-    <MESSAGE value="fix workflow attempt #4" />
-    <MESSAGE value="fix workflow attempt #5" />
-    <MESSAGE value="fix workflow attempt #6" />
-    <MESSAGE value="fix workflow attempt #7" />
-    <MESSAGE value="fix workflow attempt #8" />
-    <MESSAGE value="fix workflow attempt #9" />
-    <MESSAGE value="fox workflow attempt #10" />
-    <MESSAGE value="fox fluff attempt 11" />
-    <option name="LAST_COMMIT_MESSAGE" value="fox fluff attempt 11" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main_copy.py</url>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

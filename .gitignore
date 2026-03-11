@@ -1,6 +1,6 @@
 depots
 diff
-DepotDownloader
+depot-diff
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

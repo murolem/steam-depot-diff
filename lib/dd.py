@@ -3,10 +3,11 @@ import io
 import os
 import platform
 import re
-import shutil
 import subprocess
+import shutil
 import sys
 import zipfile
+import stat
 from contextlib import redirect_stderr
 from datetime import datetime
 from pathlib import Path
@@ -29,9 +30,10 @@ class ParseDepotStringError(TypedDict):
     details: Optional[Any]
 
 class DepotDownloader:
-    def __init__(self, dd_dirpath: str, depots_dirpath: str):
+    def __init__(self, dd_dirpath: str, depots_dirpath: str, creds_filepath: str):
         self.dd_dirpath = dd_dirpath
         self.depots_dirpath = depots_dirpath
+        self.creds_filepath = creds_filepath
         self.dd_exec_path = None
         self.is_setup = False
         self.depot_downloads_counter = 0
@@ -92,7 +94,6 @@ class DepotDownloader:
         # normalize option dash by replacing it with double dash
         dash_norm_regex = r'(-)([a-zA-Z0-9]+ [a-zA-Z0-9]+)'
         value = re.sub(dash_norm_regex, "--\\2", value)
-        print(value)
 
         parser = argparse.ArgumentParser(exit_on_error=False)
         parser.add_argument("--app", required=True)
@@ -130,10 +131,12 @@ class DepotDownloader:
 
         # shortcut: do not redownload if already did
         try:
-            self.is_setup = True
             self.dd_exec_path = self._get_exec_filepath()
+            # assign here since the code below needs this to be true
+            self.is_setup = True
+            self._ensure_is_executable()
             return
-        except:
+        except Exception as e:
             self.is_setup = False
             pass
 
@@ -188,8 +191,10 @@ class DepotDownloader:
         print("Cleaning up")
         os.remove(archive_filepath)
 
-        self.is_setup = True
         self.dd_exec_path = self._get_exec_filepath()
+        # assign here since the code below needs this to be true
+        self.is_setup = True
+        self._ensure_is_executable()
 
     def get_depot(self, depot_init: DepotInit, branch_override: Optional[str], dd_args: Optional[str]) -> str:
         """
@@ -214,8 +219,10 @@ class DepotDownloader:
 
         output_dirpath = os.path.join(self.depots_dirpath, f"app-{app}", f"depot-{depot}", f"manifest-{manifest}")
 
-        creds = get_steam_creds()
-        command = f"{self.dd_exec_path} -username {creds.login} -password {creds.password} -remember-password -app {app} -depot {depot} -manifest {manifest} -branch {branch} -validate -dir {output_dirpath}"
+        creds = get_steam_creds(self.creds_filepath)
+        creds_part = f"-username {creds.login} -password {creds.password} -remember-password" if self.depot_downloads_counter == 1 else f"-username {creds.login} -remember-password"
+
+        command = f"{self.dd_exec_path} {creds_part} -app {app} -depot {depot} -manifest {manifest} -branch {branch} -validate -dir {output_dirpath}"
         if dd_args:
             command += f" {dd_args}"
 
@@ -290,10 +297,18 @@ class DepotDownloader:
         archive_dirpath_path_obj = Path(self.dd_dirpath)
         if archive_dirpath_path_obj.is_dir():
             for item in archive_dirpath_path_obj.iterdir():
-                if item.name.startswith("DepotDownloader"):
+                if item.name == "DepotDownloader" or item.name == "DepotDownloader.exe":
                     return os.path.join(archive_dirpath_path_obj, item.name)
 
         raise Exception("archive executable not found in directory: " + self.dd_dirpath)
+
+    def _ensure_is_executable(self):
+        self._assert_setup()
+
+        # get current perms
+        st = os.stat(self.dd_exec_path)
+        # chmod +x
+        os.chmod(self.dd_exec_path, st.st_mode | stat.S_IEXEC)
 
     def _remove(self) -> None:
         """Removes DepotDownloader directory from disk if it exists."""
