@@ -11,8 +11,10 @@ To find depots for a game, head to the game's SteamDB page > **Depots** (on Side
 
 To create a diff, two manifests are needed. The **base** manifest is the version that will be at the bottom and the **top** manifest is the version that will be layed on top.
  
-## Usage
+## Requirements
+Git (in PATH)
 
+## Usage
 > [!NOTE]
 > This is a CLI utility, so to interact with the it you will need to use a terminal.
 
