@@ -61,7 +61,7 @@ Example: 799601
 If used as a depot string, a string enclosed in quotes containing information about the BASE app & depot & manifest must be provided in this singular argument.
 BASE meaning the other depot will be applied on TOP of this one. 
 See first positional argument help for examples.
-""", nargs="?")
+""")
 argparser.add_argument('manifest_top', help="Manifest ID of manifest to diff with. Example: 5090889475431819364", nargs="?")
 argparser.add_argument('manifest_base', help="Manifest ID of manifest to base the diff at. Example: 4892202388027804689", nargs="?")
 
