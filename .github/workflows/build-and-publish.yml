@@ -12,7 +12,33 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          # Linux targets
+          - os: linux
+            arch: arm
+            runner: ubuntu-latest
+          - os: linux
+            arch: arm64
+            runner: ubuntu-latest
+          - os: linux
+            arch: x64
+            runner: ubuntu-latest
+
+          # macOS targets
+          - os: macos
+            arch: arm64
+            runner: macos-latest
+          - os: macos
+            arch: x64
+            runner: macos-latest
+
+          # Windows targets
+          - os: windows
+            arch: arm64
+            runner: windows-latest
+          - os: windows
+            arch: x64
+            runner: windows-latest
 
     runs-on: ${{ matrix.os }}
     steps:
