@@ -8,14 +8,13 @@ A CLI diff utility for Steam depots.
 
 Grab the [latest release](https://github.com/murolem/steam-depot-diff/releases/latest) matching your OS.
 
-Create a folder and put the binary/executable in there since it will create some files. 
+Assuming the name of the binary is `depot-diff`.
 
 If on Linux, grant the execute permission first:
 ```bash
-chmod +x ./depot-diff-linux-x86_64
+chmod +x ./depot-diff
 ```
 
-Assuming the name of the binary is `depot-diff`.
 To see available commands, run:
 ```bash
 ./depot-diff --help
