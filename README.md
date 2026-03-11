@@ -28,7 +28,7 @@ usage: Steam Depot Differ [-h] [--version] [--branch BRANCH]
                           [--dd-path DD_PATH] [--redownload-dd]
                           [--diff-path DIFF_PATH] [--commit-diff] [--relogin]
                           [--creds-path CREDS_PATH]
-                          app_or_depot_string_top [depot_or_depot_string_base]
+                          app_or_depot_string_top depot_or_depot_string_base
                           [manifest_top] [manifest_base]
 
 Downloads app depots and diffs changes between them.
@@ -65,7 +65,6 @@ positional arguments:
                         If used as a depot string, a string enclosed in quotes containing information about the BASE app & depot & manifest must be provided in this singular argument.
                         BASE meaning the other depot will be applied on TOP of this one. 
                         See first positional argument help for examples.
-                         (default: None)
   manifest_top          Manifest ID of manifest to diff with. Example: 5090889475431819364 (default: None)
   manifest_base         Manifest ID of manifest to base the diff at. Example: 4892202388027804689 (default: None)
 
