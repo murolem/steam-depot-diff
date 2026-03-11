@@ -80,7 +80,7 @@ group_diff.add_argument('--commit-diff', help="Commits the diff. May be preferre
 
 group_creds = argparser.add_argument_group("CREDENTIALS")
 group_creds.add_argument('--relogin', help="Removes any saved Steam credentials. Useful if entered wrong.", action="store_true")
-group_creds.add_argument('--creds-path', help="Path to the file containing credentials.", default="depot-diff/.env")
+group_creds.add_argument('--creds-path', help="Path to the file containing credentials.", default="depot-diff/.YOUR-CREDENTIALS-DO-NOT-SHARE")
 
 
 args = argparser.parse_args()

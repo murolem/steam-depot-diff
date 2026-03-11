@@ -1,6 +1,16 @@
 # steam-depot-diff
-A CLI diff utility for Steam depots.
+**A CLI diff utility for Steam depots.**
 
+## Depots
+
+Depots are packages shipped with each game (app) release. For example, a game might have 32-bit and 64-bit versions as its depots.
+
+A depot can have many manifests. A manifest describes a version of a depot.
+
+To find depots for a game, head to the game's SteamDB page > **Depots** (on Side panel) > pick a depot > **Manifests** (on side panel). Use the copy button on the manifest you want (preferably with *DepotDownloader* format) to copy it.
+
+To create a diff, two manifests are needed. The **base** manifest is the version that will be at the bottom and the **top** manifest is the version that will be layed on top.
+ 
 ## Usage
 
 > [!NOTE]
