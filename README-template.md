@@ -83,7 +83,7 @@ When using custom formats, each formatted string **must be** enclosed in quotes.
 
 Format:
 ```bash
-./depot-diff "-app app -depot depot -manifest manifest" "-app app -depot depot -manifest manifest"
+./depot-diff "-app app -depot depot -manifest manifest-top" "-app app -depot depot -manifest manifest-base"
 ```
 
 Example using the copy button on SteamDB with _DepotDownloader_ as chosen format.
