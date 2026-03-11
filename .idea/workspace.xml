@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e72f9f5-4afd-4464-b41c-8cb698323151" name="Changes" comment="" />
+    <list default="true" id="1e72f9f5-4afd-4464-b41c-8cb698323151" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/README-template.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/generate-readme.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -180,7 +185,55 @@
       <option name="project" value="LOCAL" />
       <updated>1773149016684</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="fix workflow attempt #6">
+      <option name="closed" value="true" />
+      <created>1773149254904</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1773149254904</updated>
+    </task>
+    <task id="LOCAL-00011" summary="fix workflow attempt #7">
+      <option name="closed" value="true" />
+      <created>1773149388112</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1773149388112</updated>
+    </task>
+    <task id="LOCAL-00012" summary="fix workflow attempt #8">
+      <option name="closed" value="true" />
+      <created>1773149611887</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1773149611887</updated>
+    </task>
+    <task id="LOCAL-00013" summary="fix workflow attempt #9">
+      <option name="closed" value="true" />
+      <created>1773150676241</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1773150676241</updated>
+    </task>
+    <task id="LOCAL-00014" summary="fox workflow attempt #10">
+      <option name="closed" value="true" />
+      <created>1773151189915</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1773151189915</updated>
+    </task>
+    <task id="LOCAL-00015" summary="fox fluff attempt 11">
+      <option name="closed" value="true" />
+      <created>1773151429415</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1773151429415</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -210,7 +263,13 @@
     <MESSAGE value="fix workflow attempt #3" />
     <MESSAGE value="fix workflow attempt #4" />
     <MESSAGE value="fix workflow attempt #5" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix workflow attempt #5" />
+    <MESSAGE value="fix workflow attempt #6" />
+    <MESSAGE value="fix workflow attempt #7" />
+    <MESSAGE value="fix workflow attempt #8" />
+    <MESSAGE value="fix workflow attempt #9" />
+    <MESSAGE value="fox workflow attempt #10" />
+    <MESSAGE value="fox fluff attempt 11" />
+    <option name="LAST_COMMIT_MESSAGE" value="fox fluff attempt 11" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
