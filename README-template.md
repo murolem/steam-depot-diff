@@ -93,7 +93,6 @@ First let's copy the first manifest (top) and add it to the command, enclosed in
 ```
 
 Then let's copy the second manifest (base) and add it to the end, also enclosed in quotes.
-Additionaly, let's manually specify the branch since the format doesn't support it.
 
 **Result:**
 ```bash
