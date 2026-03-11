@@ -206,5 +206,5 @@ python ./main.py
 
 To build for current platform, run:
 ```bash
-pyinstaller -F main.py
+pyinstaller -F main.py --add-data VERSION:.
 ```
