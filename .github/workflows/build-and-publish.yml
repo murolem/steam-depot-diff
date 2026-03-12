@@ -40,7 +40,7 @@ jobs:
 
       - name: Build
         shell: bash
-        run: pyinstaller -F main.py -n ${{ env.RELEASE_NAME }} --add-data VERSION:.
+        run: uv run pyinstaller -F main.py -n ${{ env.RELEASE_NAME }} --add-data VERSION:.
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v6
