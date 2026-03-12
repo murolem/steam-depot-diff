@@ -196,7 +196,7 @@ See `--help` for options such as enabling commiting the top depot changes.
 ## Development
 
 ### Requirements
-Python 3.9+
+Python >=3.11
 
 ### Setup
 
