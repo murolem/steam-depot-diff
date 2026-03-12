@@ -1,5 +1,4 @@
 import argparse
-import io
 import os
 import platform
 import re
@@ -8,12 +7,10 @@ import shutil
 import sys
 import zipfile
 import stat
-from contextlib import redirect_stderr
 from datetime import datetime
 from pathlib import Path
-from tkinter.messagebox import RETRY
-from typing import TypedDict, Optional, Any
-from result import Ok, Err, Result, is_ok, is_err
+from typing import TypedDict, Optional, Any, NotRequired
+from result import Ok, Err, Result
 import requests
 from lib.creds import get_steam_creds
 from lib.download import download
@@ -26,15 +23,15 @@ class DepotInit(TypedDict):
 
 class ParseDepotStringError(TypedDict):
     reason: str
-    error: Optional[Exception | list[Exception]]
-    details: Optional[Any]
+    error: NotRequired[Exception | list[tuple[str, Exception]]]
+    details: NotRequired[Any]
 
 class DepotDownloader:
     def __init__(self, dd_dirpath: str, depots_dirpath: str, creds_filepath: str):
         self.dd_dirpath = dd_dirpath
         self.depots_dirpath = depots_dirpath
         self.creds_filepath = creds_filepath
-        self.dd_exec_path = None
+        self.dd_exec_path: Optional[str] = None
         self.is_setup = False
         self.depot_downloads_counter = 0
 
@@ -56,9 +53,9 @@ class DepotDownloader:
         return Err(ParseDepotStringError(
             reason="Parse error; methods exhausted",
             error=[
-                ["method1", parsed1],
-                ["method2", parsed2],
-            ],
+                ("method1", parsed1),
+                ("method2", parsed2),
+            ],  # ty:ignore[invalid-argument-type]
             details={
                 "string": value
             }
@@ -136,11 +133,11 @@ class DepotDownloader:
             self.is_setup = True
             self._ensure_is_executable()
             return
-        except Exception as e:
+        except Exception:
             self.is_setup = False
             pass
 
-        print(f"Getting latest DepotDownloader")
+        print("Getting latest DepotDownloader")
 
         # figure out archive name
         preferred_archive_name = self._guess_dd_archive_name()
@@ -220,6 +217,9 @@ class DepotDownloader:
         output_dirpath = os.path.join(self.depots_dirpath, f"app-{app}", f"depot-{depot}", f"manifest-{manifest}")
 
         creds = get_steam_creds(self.creds_filepath)
+        if not creds:
+            raise Exception("failed to retrieve credentials")
+
         creds_part = f"-username {creds.login} -password {creds.password} -remember-password" if self.depot_downloads_counter == 1 else f"-username {creds.login} -remember-password"
 
         command = f"{self.dd_exec_path} {creds_part} -app {app} -depot {depot} -manifest {manifest} -branch {branch} -validate -dir {output_dirpath}"
@@ -239,7 +239,7 @@ class DepotDownloader:
 
         return output_dirpath
 
-    def _assert_setup(self):
+    def _assert_setup(self) -> None:
         if not self.is_setup:
             raise Exception("Setup DepotDownloader first by calling setup()")
 
@@ -302,8 +302,10 @@ class DepotDownloader:
 
         raise Exception("archive executable not found in directory: " + self.dd_dirpath)
 
-    def _ensure_is_executable(self):
+    def _ensure_is_executable(self) -> None:
         self._assert_setup()
+        assert self.dd_exec_path
+      
 
         # get current perms
         st = os.stat(self.dd_exec_path)

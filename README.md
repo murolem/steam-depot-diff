@@ -101,7 +101,7 @@ DIFF:
 CREDENTIALS:
   --relogin             Removes any saved Steam credentials. Useful if entered wrong. (default: False)
   --creds-path CREDS_PATH
-                        Path to the file containing credentials. (default: depot-diff/.YOUR-CREDENTIALS-DO-NOT-SHARE)
+                        Path to the file containing credentials. (default: depot-diff/your-credentials (DO NOT SHARE))
 
 Source code: https://github.com/murolem/steam-depot-diff
 

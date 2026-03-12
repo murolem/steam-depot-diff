@@ -1,0 +1,26 @@
+[project]
+name = "steam-depot-diff"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "altgraph==0.17.5",
+    "certifi==2026.2.25",
+    "charset-normalizer==3.4.5",
+    "dotenv==0.9.9",
+    "gitdb==4.0.12",
+    "gitpython==3.1.46",
+    "idna==3.11",
+    "packaging==26.0",
+    "pyinstaller==6.19.0",
+    "pyinstaller-hooks-contrib==2026.3",
+    "python-dotenv==1.2.2",
+    "requests==2.32.5",
+    "result==0.17.0",
+    "setuptools==82.0.1",
+    "smmap==5.0.3",
+    "tabulate==0.10.0",
+    "tqdm==4.67.3",
+    "urllib3==2.6.3",
+]

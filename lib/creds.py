@@ -2,7 +2,7 @@ import os
 from getpass import getpass
 from pathlib import Path
 from typing import Callable, NamedTuple, Literal
-from dotenv import load_dotenv, get_key, set_key, dotenv_values
+from dotenv import load_dotenv, set_key
 from lib.confirm import confirm
 
 class SteamCreds(NamedTuple):
@@ -16,7 +16,7 @@ class VarGetResult(NamedTuple):
     value: str | None
     source: Literal["prompted", "read_from_disk", None]
 
-def get_steam_creds(creds_filepath: str) -> SteamCreds:
+def get_steam_creds(creds_filepath: str) -> SteamCreds | None:
     """Prompts user for Steam credentials or loads them from disk if they were saved earlier.
 
     If called before and credentials were produced successfully, returns them instead.
@@ -33,14 +33,16 @@ def get_steam_creds(creds_filepath: str) -> SteamCreds:
     load_dotenv(creds_filepath)
 
     steam_login_res = var('STEAM_LOGIN', lambda: input_str("Steam Login: "))
-    if steam_login_res.value in [None, ""]: return None
+    if steam_login_res.value in [None, ""]: 
+        return None
 
     steam_pass_res = var('STEAM_PASSWORD', lambda: input_pass("Steam Password: "))
-    if steam_pass_res.value in [None, ""]: return None
+    if steam_pass_res.value in [None, ""]: 
+        return None
 
     if (
         steam_login_res.source == "prompted" or steam_pass_res.source == "prompted"
-    ) and confirm(f"Remember credentials? (will be saved into '{creds_fp}' file) (can be reset with --relogin)", default=True):
+    ) and confirm(f"Remember credentials? (can be reset with --relogin) (will be saved into '{creds_fp}' file)", default=True):
         var('STEAM_LOGIN', lambda: steam_login_res.value, save_to_disk=True)
         var('STEAM_PASSWORD', lambda: steam_pass_res.value, save_to_disk=True)
 
@@ -89,5 +91,5 @@ def input_str(msg):
 def input_pass(msg = "Password: "):
     try:
         return getpass(msg)
-    except:
+    except Exception:
         return None

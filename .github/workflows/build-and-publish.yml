@@ -18,23 +18,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Setup Python
-        uses: actions/setup-python@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
         with:
-          python-version: '3.13'
-          cache: 'pip'
+          enable-cache: true
+
+      - name: Setup Python
+        shell: bash
+        run: uv python install
+
       - name: Install dependencies
         shell: bash
-        run: pip install -r requirements.txt
+        run: uv sync --locked --all-extras --dev
+
       - name: Generate release filename
         shell: bash
         run: |
           RELEASE_NAME="$(python ./generate_release_filename.py)"
           echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
+
       - name: Build
         shell: bash
         run: pyinstaller -F main.py -n ${{ env.RELEASE_NAME }} --add-data VERSION:.
-      - name: Save build artifact
+
+      - name: Upload build artifact
         uses: actions/upload-artifact@v6
         with:
           name: artifact-${{ strategy.job-index }}
@@ -50,17 +58,20 @@ jobs:
           sparse-checkout: |
             VERSION
           sparse-checkout-cone-mode: false
+
       - name: Download build artifacts
         uses: actions/download-artifact@v5
         with:
           path: dist
           pattern: artifact-*
           merge-multiple: true
+
       - name: Read version
         shell: bash
         run: |
           RELEASE_VERSION="$(cat VERSION)"
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+
       - name: Publish
         uses: softprops/action-gh-release@v2
         with:

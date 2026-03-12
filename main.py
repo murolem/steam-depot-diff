@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from typing import Any
 import argparse
 import os
 from result import Result
@@ -71,7 +72,7 @@ group_depot.add_argument('--dd-args', help="Additional args to pass to DepotDown
 group_depot.add_argument('--depots-path', help="Directory path for storing depots.", default="depot-diff/depots")
 
 group_dd = argparser.add_argument_group("DEPOT DOWNLOADER")
-group_dd.add_argument('--dd-path', help="DepotDownloader binary directory. Created and downloaded automatically from the official repo if missing.", default=f"depot-diff/DepotDownloader")
+group_dd.add_argument('--dd-path', help="DepotDownloader binary directory. Created and downloaded automatically from the official repo if missing.", default="depot-diff/DepotDownloader")
 group_dd.add_argument('--redownload-dd', help="Deletes existing DepotDownloader binary (if any) and downloads it again.", action="store_true")
 
 group_diff = argparser.add_argument_group("DIFF")
@@ -80,7 +81,7 @@ group_diff.add_argument('--commit-diff', help="Commits the diff. May be preferre
 
 group_creds = argparser.add_argument_group("CREDENTIALS")
 group_creds.add_argument('--relogin', help="Removes any saved Steam credentials. Useful if entered wrong.", action="store_true")
-group_creds.add_argument('--creds-path', help="Path to the file containing credentials.", default="depot-diff/.YOUR-CREDENTIALS-DO-NOT-SHARE")
+group_creds.add_argument('--creds-path', help="Path to the file containing credentials.", default="depot-diff/your-credentials (DO NOT SHARE)")
 
 
 args = argparser.parse_args()
@@ -114,7 +115,7 @@ if args.manifest_top:
 else:
     # assume depot strings are used
 
-    def assert_ok(res: Result, err_msg: str):
+    def assert_ok(res: Result[Any, Any], err_msg: str):
         if res.is_err():
             print(err_msg)
             print(res.err_value.get('reason'))
@@ -132,12 +133,16 @@ else:
     depot_base = depot_base_res.ok_value
 
 dd.get_exec(force_download=args.redownload_dd)
+assert dd.dd_exec_path
 print("DepotDownloader executable: " + dd.dd_exec_path)
 
 print("Getting Steam credentials")
 if args.relogin:
     clear_steam_creds_from_disk()
 steam_creds = get_steam_creds(args.creds_path)
+if not steam_creds:
+    raise Exception("credentials not provided")
+
 print("Will login to DepotDownloader as: " + steam_creds.login)
 
 print("Getting depots")
