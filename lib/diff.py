@@ -1,9 +1,16 @@
 import os.path
 import shutil
 from git import Repo
+from lib.assert_.is_directory import assert_is_directory
 
 
-def diff(diff_dirpath: str, base_dirpath: str, top_dirpath: str, commit_diff: bool):
+def diff(
+    diff_dirpath: str, 
+    base_dirpath: str, 
+    top_dirpath: str, 
+    commit_diff: bool,
+    cache_diff_bases: bool
+):
     print("Diffing:")
     print("Base: " + base_dirpath)
     print(" Top: " + top_dirpath)
@@ -26,14 +33,41 @@ def diff(diff_dirpath: str, base_dirpath: str, top_dirpath: str, commit_diff: bo
 
     repo = Repo.init(diff_dirpath)
 
+    print("Processing base")
+    base_has_diff_base = has_diff_base(base_dirpath)
+    base_has_valid_diff_base = False
+    if cache_diff_bases:
+        # if has a diff base = use it
+        if base_has_diff_base:
+            base_repo = Repo(base_dirpath)
+            if not base_repo.is_dirty(untracked_files=True):
+                # clean, can be used as cache
+                print("Found cached base diff")
+                base_has_valid_diff_base = True
+        # otherwise create the diff base for this depot (manifest)
+        else:
+            print("Creating base diff cache")
+            base_repo = Repo.init(base_dirpath)
+
+            print("Staging (inside base depot)... (this may take a while)")
+            base_repo.git.add(all=True)
+
+            print("Committing (inside base depot)...")
+            base_repo.index.commit("base")
+
+            base_has_valid_diff_base = True
+
     print("Importing base")
     shutil.copytree(base_dirpath, diff_dirpath, dirs_exist_ok = True)
 
-    print("Staging... (this may take a while)")
-    repo.git.add(all=True)
+    if cache_diff_bases and base_has_valid_diff_base:
+        print("Using cached base diff")
+    else:
+        print("Staging diff... (this may take a while)")
+        repo.git.add(all=True)
 
-    print("Commiting...")
-    repo.index.commit("base")
+        print("Committing diff...")
+        repo.index.commit("base")
 
     print("Preparing for top import")
     for item in [f for f in os.listdir(diff_dirpath) if f != '.git']:
@@ -44,15 +78,46 @@ def diff(diff_dirpath: str, base_dirpath: str, top_dirpath: str, commit_diff: bo
             shutil.rmtree(item_path, onerror=shutil_onerror_fix_perms_and_retry)
 
     print("Importing top")
-    shutil.copytree(top_dirpath, diff_dirpath, dirs_exist_ok = True)
+    shutil.copytree(
+        top_dirpath, 
+        diff_dirpath, 
+        dirs_exist_ok = True, 
+        # always ignore .git dir since it would override the current git config
+        ignore=lambda directory, contents: ['.git'] if directory == top_dirpath else []
+    )
 
     if commit_diff:
-        print("Staging... (this may take a while)")
+        print("Staging diff... (this may take a while)")
         repo.git.add(all=True)
 
-        print("Commiting...")
+        print("Committing diff...")
         repo.index.commit("top")
 
+
+def try_clear_cached_diff_base(manifest_dirpath: str) -> None:
+    assert_is_directory(manifest_dirpath, "failed to clear cached diff base: path is not a directory or doesn't exist: " + manifest_dirpath)
+
+    git_dirpath = manifest_dirpath + os.path.sep + ".git"
+    if os.path.isdir(git_dirpath):
+        print("Cached diff base for clear found; clearing at: " + manifest_dirpath)
+        shutil.rmtree(git_dirpath, onerror=shutil_onerror_fix_perms_and_retry)
+
+    pass
+    
+
+def has_diff_base(manifest_dirpath: str) -> bool:
+    assert_is_directory(manifest_dirpath, "failed to check for diff base: path is not a directory or doesn't exist: " + manifest_dirpath)
+
+    git_dirpath = manifest_dirpath + os.path.sep + ".git"
+    if not os.path.isdir(git_dirpath):
+        return False
+    
+    return True
+
+def is_repo_clean(repo: Repo) -> bool:
+    is_dirty = repo.is_dirty(untracked_files=True)
+    return not is_dirty
+    
 
 def shutil_onerror_fix_perms_and_retry(func, path, exc_info):
     """

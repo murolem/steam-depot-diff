@@ -7,7 +7,7 @@ from result import Result
 from tabulate import tabulate
 from lib.creds import clear_steam_creds_from_disk, get_steam_creds
 from lib.dd import DepotDownloader, DepotInit
-from lib.diff import diff
+from lib.diff import diff, try_clear_cached_diff_base
 from lib.inner_binary_path import inner_binary_path
 
 with open(inner_binary_path + 'VERSION', 'r') as file:
@@ -78,6 +78,9 @@ group_dd.add_argument('--redownload-dd', help="Deletes existing DepotDownloader 
 group_diff = argparser.add_argument_group("DIFF")
 group_diff.add_argument('--diff-path', help="Directory path for diff process. This is where the diff will happen and can be viewed.", default="depot-diff/diff")
 group_diff.add_argument('--commit-diff', help="Commits the diff. May be preferred if viewing the commited changes vs uncommited is more convenient.", action="store_true")
+group_diff.add_argument('--no-diff-caching', help="Disables caching BASE part of a diff within depots. By default, BASE part of a diff is saved within the related depot (manifest directory) and reused on subsequent runs.", action="store_true")
+group_diff.add_argument('--clear-diff-cache', help="Clears cached base diffs within depots (only affects those currently being processed). See --no-diff-caching option for details.", action="store_true")
+
 
 group_creds = argparser.add_argument_group("CREDENTIALS")
 group_creds.add_argument('--relogin', help="Removes any saved Steam credentials. Useful if entered wrong.", action="store_true")
@@ -152,7 +155,17 @@ print("Getting BASE depot")
 depot_base_dirpath = dd.get_depot(depot_base, dd_args=args.dd_args, branch_override=args.branch)
 
 # print("Diffing")
-diff(args.diff_path, depot_top_dirpath, depot_base_dirpath, commit_diff=args.commit_diff)
+if args.clear_diff_cache:
+    try_clear_cached_diff_base(depot_top_dirpath)
+    try_clear_cached_diff_base(depot_base_dirpath)
+
+diff(
+    args.diff_path, 
+    base_dirpath=depot_base_dirpath, 
+    top_dirpath=depot_top_dirpath,
+    commit_diff=args.commit_diff,
+    cache_diff_bases=not args.no_diff_caching
+)
 
 print("All done!")
 print("View diff at: " + os.path.abspath(args.diff_path))

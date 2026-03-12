@@ -37,7 +37,8 @@ Example output for the latest version:
 usage: Steam Depot Differ [-h] [--version] [--branch BRANCH]
                           [--dd-args DD_ARGS] [--depots-path DEPOTS_PATH]
                           [--dd-path DD_PATH] [--redownload-dd]
-                          [--diff-path DIFF_PATH] [--commit-diff] [--relogin]
+                          [--diff-path DIFF_PATH] [--commit-diff]
+                          [--no-diff-caching] [--clear-diff-cache] [--relogin]
                           [--creds-path CREDS_PATH]
                           app_or_depot_string_top depot_or_depot_string_base
                           [manifest_top] [manifest_base]
@@ -97,6 +98,8 @@ DIFF:
   --diff-path DIFF_PATH
                         Directory path for diff process. This is where the diff will happen and can be viewed. (default: depot-diff/diff)
   --commit-diff         Commits the diff. May be preferred if viewing the commited changes vs uncommited is more convenient. (default: False)
+  --no-diff-caching     Disables caching BASE part of a diff within depots. By default, BASE part of a diff is saved within the related depot (manifest directory) and reused on subsequent runs. (default: False)
+  --clear-diff-cache    Clears cached base diffs within depots (only affects those currently being processed). See --no-diff-caching option for details. (default: False)
 
 CREDENTIALS:
   --relogin             Removes any saved Steam credentials. Useful if entered wrong. (default: False)
